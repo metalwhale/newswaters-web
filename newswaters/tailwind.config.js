@@ -8,5 +8,10 @@ export default {
   theme: {
     extend: {},
   },
-  plugins: [],
+  plugins: [
+    require("daisyui"), // See: https://daisyui.com/docs/install/
+  ],
+  daisyui: {
+    themes: ["dark"],
+  },
 }
