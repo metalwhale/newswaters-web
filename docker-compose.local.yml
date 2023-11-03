@@ -4,6 +4,8 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile.local
+    environment:
+      - VITE_WHISTLER_ROOT_ENDPOINT=${WHISTLER_ROOT_ENDPOINT}
     ports:
       - 5173:5173
     volumes:
