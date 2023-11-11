@@ -20,7 +20,7 @@ import Footer from "./components/Footer.vue"
         </div>
       </div>
       <!-- Items list -->
-      <Item v-for="(item, index) in items" :item="item" :index="index" />
+      <Item v-for="([id, _score, title, url], index) in items" :index="index" :id="id" :title="title" :url="url" />
     </div>
     <Footer />
   </div>
@@ -44,12 +44,18 @@ export default {
         { "sentence": this.sentence, "limit": 100 }
       );
       const items: any[] = [];
+      const decay_rate = 0.98;
+      const now = Date.now() / 1000;
       for (const item of response.data.items) {
-        const score = item[1]; // See: https://github.com/metalwhale/newswaters/blob/whistler-v0.2.2/whistler/src/main.rs#L101
-        if (score > 0.7) {
-          items.push(item);
+        // See: https://github.com/metalwhale/newswaters/blob/whistler-v0.2.2/whistler/src/main.rs#L101
+        const [id, score, title, url, time] = item;
+        if (score >= 0.7) {
+          const elapsed_day = (now - time) / 86400;
+          const decayed_score = score * Math.pow(decay_rate, elapsed_day);
+          items.push([id, decayed_score, title, url]);
         }
       }
+      items.sort(([_i1, s1, _t1, _u1], [_i2, s2, _t2, _u2]) => s2 - s1);
       this.items = items;
     }
   }
