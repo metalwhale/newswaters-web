@@ -20,7 +20,8 @@ import Footer from "./components/Footer.vue"
         </div>
       </div>
       <!-- Items list -->
-      <Item v-for="([id, _score, title, url], index) in items" :index="index" :id="id" :title="title" :url="url" />
+      <Item v-for="([id, _score, title, url, similarity], index) in items" :index="index" :id="id" :title="title"
+        :url="url" :similarity="similarity" />
     </div>
     <Footer />
   </div>
@@ -52,10 +53,11 @@ export default {
         if (score >= 0.7) {
           const elapsed_day = (now - time) / 86400;
           const decayed_score = score * Math.pow(decay_rate, elapsed_day);
-          items.push([id, decayed_score, title, url]);
+          const similarity = score >= 0.75 ? "high" : "low";
+          items.push([id, decayed_score, title, url, similarity]);
         }
       }
-      items.sort(([_i1, s1, _t1, _u1], [_i2, s2, _t2, _u2]) => s2 - s1);
+      items.sort(([_i1, s1, _t1, _u1, _s1], [_i2, s2, _t2, _u2, _s2]) => s2 - s1);
       this.items = items;
     }
   }
