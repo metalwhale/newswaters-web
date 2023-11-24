@@ -1,7 +1,7 @@
 # newswaters-web
 
 ## Local development
-### `whistler` API server
+### Newswaters `api` server
 See https://github.com/metalwhale/newswaters#local-development
 
 ### Web (this repository)

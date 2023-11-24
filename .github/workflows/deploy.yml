@@ -43,7 +43,7 @@ jobs:
       - name: Build
         run: |
           bun install && \
-          export VITE_WHISTLER_ROOT_ENDPOINT=https://wave.m-cloud.dev/newswaters-whistler && \
+          export VITE_API_ROOT_ENDPOINT=https://wave.m-cloud.dev/newswaters-api && \
           bun run vite build --base=/newswaters-web
         working-directory: newswaters
       - name: Setup Pages

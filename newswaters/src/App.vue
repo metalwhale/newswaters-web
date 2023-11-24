@@ -47,7 +47,7 @@ import Footer from "./components/Footer.vue"
 
 <script lang="ts">
 import axios from "axios";
-const whistlerRootEndpoint = import.meta.env.VITE_WHISTLER_ROOT_ENDPOINT;
+const apiRootEndpoint = import.meta.env.VITE_API_ROOT_ENDPOINT;
 
 export default {
   data() {
@@ -61,7 +61,7 @@ export default {
   methods: {
     async search() {
       const response = await axios.post(
-        `${whistlerRootEndpoint}/search-similar-items`,
+        `${apiRootEndpoint}/search-similar-items`,
         { "sentence": this.sentence, "limit": 100 }
       );
       const items: any[] = [];
@@ -69,7 +69,7 @@ export default {
       const decay_rate = 0.98;
       const now = Date.now() / 1000;
       for (const item of response.data.items) {
-        // See: https://github.com/metalwhale/newswaters/blob/whistler-v0.2.2/whistler/src/main.rs#L101
+        // See: https://github.com/metalwhale/newswaters/blob/api-v0.1.0/newswaters-api/src/main.rs#L101
         const [id, score, title, url, time] = item;
         if (score >= 0.7) {
           const elapsed_day = (now - time) / 86400;
