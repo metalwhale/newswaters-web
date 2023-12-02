@@ -68,28 +68,14 @@ export default {
       const related_items: any[] = [];
       const decay_rate = 0.98;
       const now = Date.now() / 1000;
-      // `max`: sigmoid(x) at x = inf
-      // `min`: sigmoid(x) at x = 0
-      const sigmoid = function (max: number, min: number, gentleness: number, x: number) {
-        // sigmoid = a / (1 + e ^ (-x)) + b
-        // With: a + b = max
-        //       a / 2 + b = min
-        // => a = (max - min) * 2
-        //    b = max - a
-        const a = (max - min) * 2;
-        const b = max - a;
-        return a / (1 + Math.exp(- x / gentleness)) + b;
-      };
-      // The value of gentleness was chosen so that when x = 6 => sigmoid(x) ≈ 0.75
-      const matchScore = sigmoid(0.95, 0.7, 15, this.sentence.split(" ").length);
       for (const item of response.data.items) {
         // See: https://github.com/metalwhale/newswaters/blob/api-v0.1.0/newswaters-api/src/main.rs#L101
         const [id, score, title, url, time] = item;
         const elapsed_day = (now - time) / 86400;
         const decayed_score = score * Math.pow(decay_rate, elapsed_day);
-        if (score >= matchScore) {
+        if (score >= 0.75) {
           items.push([id, decayed_score, title, url]);
-        } else if (score >= matchScore - 0.05) { // Pick related items by using a less strict condition (lower score)
+        } else if (score >= 0.7) { // Pick related items by using a less strict condition (lower score)
           related_items.push([id, decayed_score, title, url]);
         }
       }
